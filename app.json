@@ -21,10 +21,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.NFC"
+      ],
+      "package": "com.hacigustave.myapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "react-native-nfc-manager"
+    ]
   }
 }
