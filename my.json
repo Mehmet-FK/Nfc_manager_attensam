@@ -1,0 +1,10 @@
+{
+    "canMakeReadOnly": true,
+ "id": "04E2C90A645080",
+  "isWritable": true,
+   "maxSize": 137,
+    "ndefMessage": [
+        {"id": "", "payload": ["Array"], "tnf": 1, "type": ["Array"]},
+         {"id": "", "payload": ["Array"], "tnf": 1, "type": ["Array"]}
+        ],
+        "techTypes": ["android.nfc.tech.NfcA", "android.nfc.tech.MifareUltralight", "android.nfc.tech.Ndef"], "type": "NFC Forum Type 2"}

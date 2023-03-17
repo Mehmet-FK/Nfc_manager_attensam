@@ -1,3 +1,5 @@
+import { Ndef } from "react-native-nfc-manager";
+
 class NfcProxy {
   async init() {
     let supported = null;
@@ -12,6 +14,13 @@ class NfcProxy {
       supported = false;
     }
     return supported;
+  }
+
+  async writeMessage(textParam) {
+    let bytes = null;
+    try {
+      bytes = Ndef.encodeMessage([Ndef.textRecord(textParam)]);
+    } catch (error) {}
   }
 }
 

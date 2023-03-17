@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import nfcManager from "react-native-nfc-manager";
+import nfcManager, { Ndef } from "react-native-nfc-manager";
 
 const Home = ({ navigation }) => {
   const [hasNfc, setHasNfc] = React.useState(null);
@@ -13,6 +13,7 @@ const Home = ({ navigation }) => {
         if (supported) {
           await nfcManager.start();
           setHasNfc(supported);
+          console.log("SUPPORTED", supported);
         }
       } catch (error) {
         console.log(error);
@@ -60,6 +61,22 @@ const Home = ({ navigation }) => {
           >
             <View style={styles.list}>
               <Text style={styles.text}>INFO</Text>
+            </View>
+          </TouchableOpacity>
+          {/* <TouchableOpacity
+            style={styles.list}
+            onPress={() => navigation.navigate("Write")}
+          >
+            <View style={styles.list}>
+              <Text style={styles.text}>Write</Text>
+            </View>
+          </TouchableOpacity> */}
+          <TouchableOpacity
+            style={styles.list}
+            onPress={() => navigation.navigate("AddNdefRecord")}
+          >
+            <View style={styles.list}>
+              <Text style={styles.text}>AddNdefRecord</Text>
             </View>
           </TouchableOpacity>
         </View>
