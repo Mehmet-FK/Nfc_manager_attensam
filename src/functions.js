@@ -21,19 +21,36 @@ export const getDataFromApi = async () => {
   return data.data;
 };
 
-export const writeMessage = async (paramArr) => {
-  let bytes = null;
+export const writeMessage = async (paramArr, extra) => {
+  // let bytes = null;
   try {
-    console.log("first");
     await nfcManager.requestTechnology(NfcTech.Ndef);
-    let bytes = null;
-    let converted = paramArr.map((x) => Ndef.textRecord(x));
-    console.log(converted);
-    bytes = Ndef.encodeMessage([...converted]);
-    console.log(bytes);
-    nfcManager.ndefHandler.writeNdefMessage(bytes);
+    // let bytes = null;
+
+    console.log("XXX", extra);
+    /* if (extra.type === "TEXT") {
+      extra = Ndef.textRecord(extra.record);
+    } else if (extra.type === "URI") {
+      extra = Ndef.uriRecord(extra.record);
+    } */
+    // extra = Ndef.uriRecord(extra.record);
+
+    extra = Ndef.textRecord("C");
+
+    console.log("X", extra);
+    console.log("ARRAY", [...paramArr, extra]);
+
+    // const bytes = Ndef.encodeMessage([...paramArr, extra]);
+    const bytes = Ndef.encodeMessage(paramArr);
+
+    await nfcManager.ndefHandler
+      .writeNdefMessage(bytes)
+      .catch((err) => console.warn("catch", err));
+    console.warn("NDEF WRITTEN");
   } catch (error) {
-    console.warn("ERRRORRR", error);
+    console.warn("ERRROR line 42 ", error);
+  } finally {
+    nfcManager.cancelTechnologyRequest().catch(() => 0);
   }
 };
 
@@ -51,4 +68,25 @@ export const addNdefRecord = async (prevVal, currVal) => {
   } catch (error) {
     console.warn("ERRRORRR", error);
   }
+};
+
+export const TNF_MAP = {
+  EMPTY: 0x0,
+  WELL_KNOWN: 0x01,
+  MIME_MEDIA: 0x02,
+  ABSOLUTE_URI: 0x03,
+  EXTERNAL_TYPE: 0x04,
+  UNKNOWN: 0x05,
+  UNCHANGED: 0x06,
+  RESERVED: 0x07,
+};
+
+export const RTD_MAP = {
+  TEXT: "T", // [0x54]
+  URI: "U", // [0x55]
+  SMART_POSTER: "Sp", // [0x53, 0x70]
+  ALTERNATIVE_CARRIER: "ac", //[0x61, 0x63]
+  HANDOVER_CARRIER: "Hc", // [0x48, 0x63]
+  HANDOVER_REQUEST: "Hr", // [0x48, 0x72]
+  HANDOVER_SELECT: "Hs", // [0x48, 0x73]
 };

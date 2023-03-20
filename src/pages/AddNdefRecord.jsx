@@ -1,44 +1,46 @@
 import { useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-import nfcManager, { NfcEvents, NfcTech } from "react-native-nfc-manager";
+import nfcManager, { Ndef, NfcEvents, NfcTech } from "react-native-nfc-manager";
 import AndroidPrompt from "../components/AndroidPrompt";
 
-import { addNdefRecord, writeMessage } from "../functions";
+import { addNdefRecord, RTD_MAP, writeMessage } from "../functions";
 
-const AddNdefRecord = () => {
-  async function scanTag() {
-    let tag = null;
-    try {
-      await nfcManager.requestTechnology([NfcTech.Ndef]);
-      console.log(1);
-      tag = await nfcManager.getTag();
-      console.log(2);
-      return tag;
-    } catch (error) {
-      console.log("asdasdasd", error);
-      console.log(3);
-    }
-    return tag;
-  }
-  //   async function scanTag() {
-  //     await nfcManager.registerTagEvent();
-  //   }
-  const promptRef = useRef();
+const AddNdefRecord = ({ navigation }) => {
   const [tagInfo, setTagInfo] = useState([]);
-  //   const [tag, settag] = useState(second)
+
+  const promptRef = useRef();
+  async function registerTag() {
+    await nfcManager.registerTagEvent();
+  }
+  async function scanTag() {
+    let tag2 = null;
+
+    try {
+      nfcManager.setEventListener(NfcEvents.DiscoverTag, (tag) => {
+        setTagInfo(tag?.ndefMessage);
+        promptRef.current.setVisible(false);
+        //!
+        console.log("tagInfo!!!", tag);
+        let msgArr = [...tag?.ndefMessage];
+
+        let extra = { type: "URI", record: "com.google.android.apps.maps" };
+
+        //!
+
+        writeMessage(tag?.ndefMessage, extra).catch((err) => console.log(err));
+      });
+    } catch (error) {
+      console.warn("ERROR ANR: 23-28", error);
+    }
+  }
 
   useEffect(() => {
-    promptRef.current.setVisible(true);
-    let tag = scanTag();
-    console.log("tag", tag);
-    promptRef.current.setVisible(true);
-    /*  nfcManager.setEventListener(NfcEvents.DiscoverTag, (tag) => {
-      addNdefRecord(tagInfo, "mehmet");
-    }); */
+    scanTag();
 
-    // promptRef.current.setVisible(true);
+    registerTag();
 
+    promptRef.current.setVisible(true);
     return () => {
       nfcManager.setEventListener(NfcEvents.DiscoverTag, null);
     };
@@ -48,7 +50,7 @@ const AddNdefRecord = () => {
     <View
       style={{ height: "100%", alignItems: "center", justifyContent: "center" }}
     >
-      <AndroidPrompt ref={promptRef} />
+      <AndroidPrompt ref={promptRef} navigation={navigation} />
     </View>
   );
 };

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-import nfcManager, { NfcEvents } from "react-native-nfc-manager";
+import nfcManager, { Ndef, NfcEvents } from "react-native-nfc-manager";
 import AndroidPrompt from "../components/AndroidPrompt";
 
 import { writeMessage } from "../functions";
@@ -14,7 +14,7 @@ const Write = () => {
 
   useEffect(() => {
     nfcManager.setEventListener(NfcEvents.DiscoverTag, (tag) => {
-      writeMessage("p1", "p2", "p3");
+      Ndef.writeMessage("p1", "p2", "p3");
       promptRef.current.setVisible(false);
     });
     scanTag();
@@ -29,7 +29,8 @@ const Write = () => {
     <View
       style={{ height: "100%", alignItems: "center", justifyContent: "center" }}
     >
-      <AndroidPrompt ref={promptRef} />
+      <Text>WRITE NDEF RECORD</Text>
+      {/* <AndroidPrompt ref={promptRef} /> */}
     </View>
   );
 };

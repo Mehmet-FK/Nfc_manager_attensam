@@ -23,7 +23,7 @@ const Info = ({ navigation }) => {
   useEffect(() => {
     nfcManager.setEventListener(NfcEvents.DiscoverTag, (tag) => {
       console.warn("tag found", tag);
-
+      // console.log(String.fromCharCode(tag?.ndefMessage[0].type));
       setTagInfo(tag);
       promptRef.current.setVisible(false);
       const { tagType, msg, id } = extractNdef(tag);

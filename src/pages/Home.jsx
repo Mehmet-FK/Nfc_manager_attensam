@@ -63,14 +63,14 @@ const Home = ({ navigation }) => {
               <Text style={styles.text}>INFO</Text>
             </View>
           </TouchableOpacity>
-          {/* <TouchableOpacity
+          <TouchableOpacity
             style={styles.list}
             onPress={() => navigation.navigate("Write")}
           >
             <View style={styles.list}>
               <Text style={styles.text}>Write</Text>
             </View>
-          </TouchableOpacity> */}
+          </TouchableOpacity>
           <TouchableOpacity
             style={styles.list}
             onPress={() => navigation.navigate("AddNdefRecord")}
