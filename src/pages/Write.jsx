@@ -1,25 +1,22 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-import nfcManager, { Ndef, NfcEvents } from "react-native-nfc-manager";
-import AndroidPrompt from "../components/AndroidPrompt";
-
-import { writeMessage } from "../functions";
+import nfcManager, { Ndef, NfcEvents, NfcTech } from "react-native-nfc-manager";
+import { writeExType } from "../functions";
 
 const Write = () => {
+  const [tagInfo, setTagInfo] = useState(null);
   async function scanTag() {
     await nfcManager.registerTagEvent();
   }
-  const promptRef = useRef();
 
   useEffect(() => {
     nfcManager.setEventListener(NfcEvents.DiscoverTag, (tag) => {
-      Ndef.writeMessage("p1", "p2", "p3");
-      promptRef.current.setVisible(false);
+      setTagInfo(tag?.ndefMessage);
+      nfcManager;
     });
     scanTag();
-    promptRef.current.setVisible(true);
-
+    writeExType();
     return () => {
       nfcManager.setEventListener(NfcEvents.DiscoverTag, null);
     };
@@ -30,7 +27,7 @@ const Write = () => {
       style={{ height: "100%", alignItems: "center", justifyContent: "center" }}
     >
       <Text>WRITE NDEF RECORD</Text>
-      {/* <AndroidPrompt ref={promptRef} /> */}
+      <Text>{JSON.stringify(tagInfo)}</Text>
     </View>
   );
 };

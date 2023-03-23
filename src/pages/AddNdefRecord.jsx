@@ -24,11 +24,10 @@ const AddNdefRecord = ({ navigation }) => {
         console.log("tagInfo!!!", tag);
         let msgArr = [...tag?.ndefMessage];
 
-        let extra = { type: "URI", record: "com.google.android.apps.maps" };
+        let extra = "com";
 
         //!
-
-        writeMessage(tag?.ndefMessage, extra).catch((err) => console.log(err));
+        writeMessage(tag, extra).catch((err) => console.log(err));
       });
     } catch (error) {
       console.warn("ERROR ANR: 23-28", error);
@@ -37,9 +36,7 @@ const AddNdefRecord = ({ navigation }) => {
 
   useEffect(() => {
     scanTag();
-
     registerTag();
-
     promptRef.current.setVisible(true);
     return () => {
       nfcManager.setEventListener(NfcEvents.DiscoverTag, null);

@@ -22,29 +22,22 @@ export const getDataFromApi = async () => {
 };
 
 export const writeMessage = async (paramArr, extra) => {
-  // let bytes = null;
   try {
     await nfcManager.requestTechnology(NfcTech.Ndef);
-    // let bytes = null;
 
-    console.log("XXX", extra);
-    /* if (extra.type === "TEXT") {
-      extra = Ndef.textRecord(extra.record);
-    } else if (extra.type === "URI") {
-      extra = Ndef.uriRecord(extra.record);
-    } */
-    // extra = Ndef.uriRecord(extra.record);
-
-    extra = Ndef.textRecord("C");
-
-    console.log("X", extra);
-    console.log("ARRAY", [...paramArr, extra]);
+    extra = Ndef.textRecord(extra);
+    /* let tempArr = [];
+    paramArr.forEach((x) => {
+      tempArr.push(Ndef.record(4, TNF_MAP.EXTERNAL_TYPE, "", x));
+      console.log("TEMP", tempArr);
+    }); */
 
     // const bytes = Ndef.encodeMessage([...paramArr, extra]);
-    const bytes = Ndef.encodeMessage(paramArr);
-
+    // const bytes = Ndef.encodeMessage([extra]);
+    let record = Ndef.record(4, TNF_MAP.EXTERNAL_TYPE, "", [49]);
+    console.log("RECORD", record);
     await nfcManager.ndefHandler
-      .writeNdefMessage(bytes)
+      .writeNdefMessage()
       .catch((err) => console.warn("catch", err));
     console.warn("NDEF WRITTEN");
   } catch (error) {
@@ -56,6 +49,7 @@ export const writeMessage = async (paramArr, extra) => {
 
 export const addNdefRecord = async (prevVal, currVal) => {
   let bytes = null;
+  Ndef.record;
   try {
     console.log("first", prevVal);
     console.log("last", currVal);
@@ -68,6 +62,20 @@ export const addNdefRecord = async (prevVal, currVal) => {
   } catch (error) {
     console.warn("ERRRORRR", error);
   }
+};
+
+export const writeExType = () => {
+  const MY_NAMESPACE = "com.mycompany";
+  const MY_TYPE = "mycustomtype";
+  const MY_PAYLOAD = ["Hello, World!"];
+  const data = {
+    [MY_NAMESPACE]: {
+      [MY_TYPE]: MY_PAYLOAD,
+    },
+  };
+
+  let bytes = -Ndef.record(Ndef.TNF_EXTERNAL_TYPE, MY_TYPE, [1], MY_PAYLOAD);
+  console.log(bytes);
 };
 
 export const TNF_MAP = {
