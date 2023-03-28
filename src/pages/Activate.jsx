@@ -1,13 +1,20 @@
-import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import AnimatedLottieView from "lottie-react-native";
+import { useEffect, useRef, useState } from "react";
+import { ScrollView, StyleSheet, TextInput, View } from "react-native";
+import nfcManager, { NfcEvents } from "react-native-nfc-manager";
+import { useInfoContext } from "../AppContext";
+import AndroidPrompt from "../components/AndroidPrompt";
 import ListItem from "../components/ListItem";
-import { getDataFromApi } from "../functions";
+import { getDataFromApi, scanTag } from "../functions";
 
-const Activate = () => {
+const Activate = ({ navigation }) => {
   const [data, setData] = useState([]);
   const [inputVal, setInputVal] = useState("");
   const [shownData, setShownData] = useState(data);
   const [loading, setLoading] = useState(false);
+  const [flag, setFlag] = useState(false);
+
+  const { info, setInfo } = useInfoContext();
 
   const handleSearch = () => {
     if (inputVal === "") {
@@ -19,18 +26,43 @@ const Activate = () => {
     setShownData(filtered);
   };
 
+  const promptRef = useRef();
+
+  useEffect(() => {
+    if (!flag) {
+      return;
+    }
+    nfcManager.setEventListener(NfcEvents.DiscoverTag, (tag) => {
+      console.log("TAG", tag);
+      promptRef.current.setVisible(false);
+      setInfo({ ...info, tag: tag.id });
+      navigation.navigate("Confirm");
+    });
+    scanTag();
+    return () => {
+      nfcManager.setEventListener(NfcEvents.DiscoverTag, null);
+    };
+  }, [flag]);
+
   useEffect(() => {
     setLoading(true);
-    getDataFromApi()
+    getDataFromApi() //TODO: set info.zähler as parameter
       .then((res) => setData(res))
       .then(() => setLoading(false));
   }, []);
+
   useEffect(() => {
     setShownData(data);
   }, [data]);
-
+  const handleClick = (item) => {
+    setInfo({ ...info, itemID: item.id });
+    setFlag(true);
+    promptRef.current?.setVisible(true);
+    // navigation.navigate("Confirm");
+  };
   return (
     <View>
+      <AndroidPrompt navigation={navigation} ref={promptRef} />
       <TextInput
         value={inputVal}
         onChangeText={(text) => setInputVal(text)}
@@ -42,15 +74,27 @@ const Activate = () => {
       />
 
       {loading && (
-        <View style={styles.loadingWrap}>
-          <Text style={styles.loading}>LOADING...</Text>
+        <View style={[styles.loadingWrap]}>
+          <AnimatedLottieView
+            source={require("../../assets/loading.json")}
+            autoPlay
+            loop
+            speed={2}
+          />
         </View>
       )}
 
       {!loading && (
         <ScrollView style={styles.scrollView}>
           {shownData.map((item, i) => (
-            <ListItem key={i} item={item} />
+            <ListItem
+              key={i}
+              navigation={navigation}
+              i={i}
+              item={item}
+              promptRef={promptRef}
+              handleClick={handleClick}
+            />
           ))}
         </ScrollView>
       )}
@@ -79,7 +123,7 @@ const styles = StyleSheet.create({
   loadingWrap: {
     justifyContent: "center",
     alignItems: "center",
-    height: "70%",
+    height: "90%",
     width: "100%",
     // backgroundColor: "red",
   },

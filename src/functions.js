@@ -1,5 +1,6 @@
 import axios from "axios";
 import nfcManager, { Ndef, NfcTech } from "react-native-nfc-manager";
+import { Toast } from "toastify-react-native";
 
 export const extractNdef = (tag) => {
   const { payload, type } = tag?.ndefMessage[0];
@@ -21,19 +22,26 @@ export const getDataFromApi = async () => {
   return data.data;
 };
 
+export const postDataToApi = async (data) => {
+  let url = "https://pbsolutions.dev/atina/AtinaUsers";
+  try {
+    await axios.post(url, data);
+    Toast.success("Erfolgreich aktiviert...");
+  } catch (error) {
+    Toast.error("Etwas schiefgelaufen");
+  }
+};
+
+export async function scanTag() {
+  await nfcManager.registerTagEvent();
+}
+
 export const writeMessage = async (paramArr, extra) => {
   try {
     await nfcManager.requestTechnology(NfcTech.Ndef);
 
     extra = Ndef.textRecord(extra);
-    /* let tempArr = [];
-    paramArr.forEach((x) => {
-      tempArr.push(Ndef.record(4, TNF_MAP.EXTERNAL_TYPE, "", x));
-      console.log("TEMP", tempArr);
-    }); */
 
-    // const bytes = Ndef.encodeMessage([...paramArr, extra]);
-    // const bytes = Ndef.encodeMessage([extra]);
     let record = Ndef.record(4, TNF_MAP.EXTERNAL_TYPE, "", [49]);
     console.log("RECORD", record);
     await nfcManager.ndefHandler
@@ -48,34 +56,7 @@ export const writeMessage = async (paramArr, extra) => {
 };
 
 export const addNdefRecord = async (prevVal, currVal) => {
-  let bytes = null;
-  Ndef.record;
-  try {
-    console.log("first", prevVal);
-    console.log("last", currVal);
-    await nfcManager.requestTechnology(NfcTech.Ndef);
-    let bytes = null;
-
-    bytes = Ndef.encodeMessage([...prevVal, Ndef.textRecord(currVal)]);
-    console.log(bytes);
-    nfcManager.ndefHandler.writeNdefMessage(bytes);
-  } catch (error) {
-    console.warn("ERRRORRR", error);
-  }
-};
-
-export const writeExType = () => {
-  const MY_NAMESPACE = "com.mycompany";
-  const MY_TYPE = "mycustomtype";
-  const MY_PAYLOAD = ["Hello, World!"];
-  const data = {
-    [MY_NAMESPACE]: {
-      [MY_TYPE]: MY_PAYLOAD,
-    },
-  };
-
-  let bytes = -Ndef.record(Ndef.TNF_EXTERNAL_TYPE, MY_TYPE, [1], MY_PAYLOAD);
-  console.log(bytes);
+  null;
 };
 
 export const TNF_MAP = {

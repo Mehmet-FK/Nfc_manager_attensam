@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import base64 from "react-native-base64";
 import nfcManager, {
@@ -6,18 +6,19 @@ import nfcManager, {
   NfcEvents,
   NfcManager,
 } from "react-native-nfc-manager";
+import { AppStateContext } from "../AppContext";
 import AndroidPrompt from "../components/AndroidPrompt";
 import NdefMessage from "../components/NdefMessage";
-import { extractNdef } from "../functions";
+import { extractNdef, scanTag } from "../functions";
 
 const Info = ({ navigation }) => {
   const [tagInfo, setTagInfo] = useState(null);
   const [tagType, setTagType] = useState(126);
   const [tagText, setTagText] = useState("");
   const [tagID, setTagID] = useState("");
-  async function scanTag() {
-    await nfcManager.registerTagEvent();
-  }
+  // async function scanTag() {
+  //   await nfcManager.registerTagEvent();
+  // }
   const promptRef = useRef();
 
   useEffect(() => {
@@ -65,7 +66,7 @@ const Info = ({ navigation }) => {
           <Text style={styles.text}> {tagType}</Text>
         </View>
 
-        <Text style={{ width: "90%" }}>{JSON.stringify(tagInfo)}</Text>
+        {/* <Text style={{ width: "90%" }}>{JSON.stringify(tagInfo)}</Text> */}
       </View>
     </View>
   );

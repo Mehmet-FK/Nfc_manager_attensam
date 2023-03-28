@@ -25,7 +25,7 @@ const Home = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={{ height: "30%" }}>
+      <View style={{ height: "25%" }}>
         <Image style={styles.image} source={require("../../assets/logo.png")} />
       </View>
 
@@ -41,42 +41,19 @@ const Home = ({ navigation }) => {
         >
           <TouchableOpacity
             style={styles.list}
-            onPress={() => navigation.navigate("Activate")}
+            onPress={() => navigation.navigate("ActivateDetails")}
           >
             <View style={styles.list}>
               <Text style={styles.text}>AKTIVIERUNG</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.list}
-            onPress={() => navigation.navigate("Deactivate")}
-          >
-            <View style={styles.list}>
-              <Text style={styles.text}>DEAKTIVIERUNG</Text>
-            </View>
-          </TouchableOpacity>
+
           <TouchableOpacity
             style={styles.list}
             onPress={() => navigation.navigate("Info")}
           >
             <View style={styles.list}>
               <Text style={styles.text}>INFO</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.list}
-            onPress={() => navigation.navigate("Write")}
-          >
-            <View style={styles.list}>
-              <Text style={styles.text}>Write</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.list}
-            onPress={() => navigation.navigate("AddNdefRecord")}
-          >
-            <View style={styles.list}>
-              <Text style={styles.text}>AddNdefRecord</Text>
             </View>
           </TouchableOpacity>
         </View>

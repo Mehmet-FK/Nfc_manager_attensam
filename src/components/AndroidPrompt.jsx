@@ -41,7 +41,7 @@ const AndroidPrompt = ({ navigation }, ref) => {
                 setVisible(false);
 
                 nfcManager.unregisterTagEvent().catch(() => 0);
-                // navigation.navigate("Home");
+                navigation.navigate("Home");
               }}
             >
               <Text style={{ fontSize: 20 }}>Cancel</Text>
@@ -60,11 +60,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   backdrop: {
-    backgroundColor: "#00000090",
+    backgroundColor: "#000",
   },
   prompt: {
     position: "absolute",
-    bottom: 0,
+    bottom: "20%",
+    top: "25%",
     left: 0,
     left: 20,
     width: Dimensions.get("window").width - 2 * 20,
