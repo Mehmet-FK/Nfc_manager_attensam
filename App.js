@@ -23,13 +23,33 @@ export default function App() {
             component={Home}
             options={{ title: "Attensam NFC Manager" }}
           />
-          <Stack.Screen name="Activate" component={Activate} />
-          <Stack.Screen name="Confirm" component={Confirm} />
-          <Stack.Screen name="Info" component={Info} />
-          <Stack.Screen name="SelectTyp" component={SelectTyp} />
-          <Stack.Screen name="AddNdefRecord" component={AddNdefRecord} />
+          <Stack.Screen
+            name="Activate"
+            component={Activate}
+            options={{ title: "Aktivierung" }}
+          />
+          <Stack.Screen
+            name="Confirm"
+            component={Confirm}
+            options={{ title: "" }}
+          />
+          <Stack.Screen name="Info" component={Info} options={{ title: "" }} />
+          <Stack.Screen
+            name="SelectTyp"
+            component={SelectTyp}
+            options={{ title: "" }}
+          />
+          <Stack.Screen
+            name="AddNdefRecord"
+            component={AddNdefRecord}
+            options={{ title: "" }}
+          />
           <Stack.Screen name="ListItem" component={ListItem} />
-          <Stack.Screen name="ActivateDetails" component={SelectTyp} />
+          <Stack.Screen
+            name="ActivateDetails"
+            component={SelectTyp}
+            options={{ title: "" }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </AppStateProvider>

@@ -1,6 +1,6 @@
 import AnimatedLottieView from "lottie-react-native";
 import { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useInfoContext } from "../AppContext";
 
 const Confirm = ({ navigation }) => {
@@ -9,11 +9,11 @@ const Confirm = ({ navigation }) => {
 
   const handleConfirm = () => {
     //TODO: POST FUNCTION
-    setLoading(true);
+    /*   setLoading(true);
 
     setTimeout(() => {
       setLoading(false);
-    }, 750);
+    }, 750); */
   };
   const handleDecline = () => {
     setInfo({});
@@ -36,18 +36,20 @@ const Confirm = ({ navigation }) => {
       {!loading && (
         <View style={{ alignItems: "center", rowGap: 5 }}>
           <Text style={styles.info}> TAG ID: {info.tag}</Text>
-          <Text style={styles.info}>ARTIKEL ID: {info.itemID}</Text>
+          <Text style={styles.info}>DATENSATZNUMMER: {info.itemID}</Text>
           <Text style={styles.info}>TYP: {info.typ}</Text>
         </View>
       )}
 
       <View style={{ flexDirection: "row", columnGap: 8 }}>
         <Text style={styles.confirm} onPress={() => handleConfirm()}>
-          Bestätigen
+          OK
         </Text>
-        <Text style={styles.decline} onPress={() => handleDecline()}>
-          Ablehnen
-        </Text>
+        <TouchableOpacity>
+          <Text style={styles.decline} onPress={() => handleDecline()}>
+            Abbrechen
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -70,6 +72,8 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     backgroundColor: "green",
     borderRadius: 10,
+    elevation: 10,
+    color: "#fff",
   },
   decline: {
     textAlign: "center",
@@ -78,16 +82,20 @@ const styles = StyleSheet.create({
     width: 150,
     paddingVertical: 20,
     borderRadius: 10,
+    elevation: 10,
+    color: "#fff",
 
-    backgroundColor: "red",
+    backgroundColor: "#a00",
   },
   info: {
-    padding: 20,
-    fontSize: 15,
+    padding: 25,
+    fontSize: 20,
     fontWeight: "bold",
     backgroundColor: "#fff",
     width: 310,
     textAlign: "center",
+    elevation: 1,
+    borderRadius: 10,
   },
   loadingWrap: {
     justifyContent: "center",

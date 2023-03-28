@@ -47,7 +47,6 @@ export default SelectTyp;
 const styles = StyleSheet.create({
   container: {
     height: "100%",
-
     alignItems: "center",
     paddingHorizontal: 15,
   },
@@ -57,7 +56,7 @@ const styles = StyleSheet.create({
     textAlignVertical: "center",
   },
   submit: {
-    backgroundColor: "red",
+    backgroundColor: "#b00",
     paddingHorizontal: 25,
     paddingVertical: 20,
     borderRadius: 10,
@@ -65,7 +64,8 @@ const styles = StyleSheet.create({
     width: 200,
     textAlign: "center",
     fontSize: 20,
-    marginTop: 25,
+    marginTop: 150,
     elevation: 15,
+    color: "#fff",
   },
 });

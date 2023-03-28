@@ -80,12 +80,13 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#e10000",
+    backgroundColor: "#b00",
     borderRadius: 10,
   },
   text: {
     fontWeight: "bold",
     fontSize: 25,
+    color: "#fff",
   },
   image: {
     width: 300,

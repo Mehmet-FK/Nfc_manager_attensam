@@ -35,65 +35,59 @@ const Dropdown = ({ data, onSelect }) => {
 
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.item} onPress={() => onItemPress(item)}>
-      <Text>⫸ {item.label}</Text>
+      <Text style={{ fontSize: 18 }}> ∎ {item.label}</Text>
     </TouchableOpacity>
   );
 
   return (
-    <TouchableOpacity
-      ref={DropdownButton}
-      style={styles.button}
-      onPress={toggleDropdown}
-    >
-      <Modal visible={visible} transparent>
-        <TouchableOpacity
-          style={styles.overlay}
-          onPress={() => setVisible(false)}
-        >
-          <View style={[styles.dropdown, { top: dropdownTop }]}>
-            <FlatList
-              style={styles.flatList}
-              renderItem={renderItem}
-              data={data}
-              keyExtractor={(item, index) => index.toString()}
-            />
+    <>
+      <TouchableOpacity
+        ref={DropdownButton}
+        style={styles.button}
+        onPress={toggleDropdown}
+      >
+        <Modal visible={visible} transparent>
+          <TouchableOpacity
+            style={styles.overlay}
+            onPress={() => setVisible(false)}
+          >
+            <View style={[styles.dropdown, { top: dropdownTop }]}>
+              <FlatList
+                style={styles.flatList}
+                renderItem={renderItem}
+                data={data}
+                keyExtractor={(item, index) => index.toString()}
+              />
+            </View>
+          </TouchableOpacity>
+        </Modal>
+        {selected && (
+          <View
+            style={[styles.dropdown, { top: dropdownTop - 105, width: "100%" }]}
+          >
+            <TouchableOpacity style={styles.item}>
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                {" "}
+                {selected.label}
+              </Text>
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
-      </Modal>
+        )}
 
-      {!selected && (
         <>
-          <Text style={styles.buttonText}>Typ Auswählen</Text>
+          <Text style={styles.buttonText}>Typ </Text>
           <Text
             style={[styles.buttonText, { fontSize: 30, fontWeight: "bold" }]}
           >
-            {visible ? (
-              <MaterialIcons name="close-fullscreen" style={{ fontSize: 30 }} />
-            ) : (
-              <MaterialIcons name="open-in-full" style={{ fontSize: 30 }} />
-            )}
+            <MaterialIcons
+              name="keyboard-arrow-down"
+              style={{ fontSize: 40 }}
+            />
           </Text>
         </>
-      )}
-      {selected && (
-        <>
-          <Text
-            style={[styles.buttonText, { fontSize: 30, fontWeight: "bold" }]}
-          >
-            {selected.label}
-          </Text>
-          <Text
-            style={[styles.buttonText, { fontSize: 30, fontWeight: "bold" }]}
-          >
-            {visible ? (
-              <MaterialIcons name="close-fullscreen" style={{ fontSize: 30 }} />
-            ) : (
-              <MaterialIcons name="open-in-full" style={{ fontSize: 30 }} />
-            )}
-          </Text>
-        </>
-      )}
-    </TouchableOpacity>
+      </TouchableOpacity>
+      {!selected && <View style={styles.edges}></View>}
+    </>
   );
 };
 
@@ -102,19 +96,21 @@ export default Dropdown;
 const styles = StyleSheet.create({
   overlay: {
     alignItems: "center",
-
     height: "100%",
+    // borderWidth: 2,
   },
   flatList: {
-    borderWidth: 1,
-    backgroundColor: "#000",
+    // borderWidth: 1,
     paddingVertical: 5,
     paddingTop: 0,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    elevation: 20,
   },
   dropdown: {
     position: "absolute",
     backgroundColor: "#fff",
-    width: "90%",
+    width: "92%",
     shadowColor: "#000000",
     shadowRadius: 4,
     shadowOffset: { height: 4, width: 0 },
@@ -124,25 +120,33 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: "center",
     width: "90%",
+    fontSize: 20,
+    color: "#fff",
   },
   item: {
     paddingHorizontal: 10,
     paddingVertical: 20,
-    marginTop: 5,
+    // marginTop: 5,
     minWidth: 150,
-    backgroundColor: "#ddd",
-    borderRadius: 10,
+    backgroundColor: "#fff",
+    // borderRadius: 10,
   },
   button: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#ccc",
+    backgroundColor: "#b00",
     height: 70,
     zIndex: 1,
     elevation: 20,
-
+    color: "#fff",
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     marginTop: 50,
+    // borderWidth: 5,
+  },
+  edges: {
+    borderWidth: 2,
+    height: 75,
+    width: "100%",
   },
 });

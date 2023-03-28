@@ -79,7 +79,7 @@ const Activate = ({ navigation }) => {
             source={require("../../assets/loading.json")}
             autoPlay
             loop
-            speed={2}
+            speed={1}
           />
         </View>
       )}
