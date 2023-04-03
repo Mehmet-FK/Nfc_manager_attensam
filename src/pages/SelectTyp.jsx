@@ -15,7 +15,7 @@ const SelectTyp = ({ navigation }) => {
   const data = [
     { label: "Zähler", value: "1" },
     { label: "KFZ", value: "2" },
-    { label: "Objekt", value: "3" },
+    { label: "Auftrag", value: "3" },
   ];
 
   const onSelect = (val) => {

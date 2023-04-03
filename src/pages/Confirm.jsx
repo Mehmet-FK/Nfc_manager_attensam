@@ -1,19 +1,29 @@
 import AnimatedLottieView from "lottie-react-native";
 import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import ToastManager from "toastify-react-native";
 import { useInfoContext } from "../AppContext";
+import { postDataToApi } from "../functions";
 
-const Confirm = ({ navigation }) => {
+const Confirm = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false);
   const { info, setInfo } = useInfoContext();
-
+  const { item } = route.params;
+  // console.log("dsfsdfdsfdsfds", route.params?.item);
   const handleConfirm = () => {
     //TODO: POST FUNCTION
-    /*   setLoading(true);
+    const data = {
+      itemType: item.ItemType,
+      itemNumber: item.ItemNumber,
+      street: item.Street,
+      streetNumber: item.Streetnumber,
+      zip: item.Zip,
+      city: item.City,
+      country: item.Country,
+      createdBy: "Atina",
+    };
 
-    setTimeout(() => {
-      setLoading(false);
-    }, 750); */
+    postDataToApi(data);
   };
   const handleDecline = () => {
     setInfo({});
@@ -22,6 +32,7 @@ const Confirm = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <ToastManager />
       {loading && (
         <View style={[styles.loadingWrap]}>
           <AnimatedLottieView
@@ -40,11 +51,10 @@ const Confirm = ({ navigation }) => {
           <Text style={styles.info}>TYP: {info.typ}</Text>
         </View>
       )}
-
       <View style={{ flexDirection: "row", columnGap: 8 }}>
-        <Text style={styles.confirm} onPress={() => handleConfirm()}>
-          OK
-        </Text>
+        <TouchableOpacity onPress={() => handleConfirm()}>
+          <Text style={styles.confirm}>OK</Text>
+        </TouchableOpacity>
         <TouchableOpacity>
           <Text style={styles.decline} onPress={() => handleDecline()}>
             Abbrechen

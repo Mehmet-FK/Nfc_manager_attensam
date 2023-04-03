@@ -146,7 +146,8 @@ const styles = StyleSheet.create({
   },
   edges: {
     borderWidth: 2,
-    height: 75,
-    width: "100%",
+    borderTopWidth: 0,
+    height: 70,
+    width: "99%",
   },
 });

@@ -2,6 +2,7 @@ import AnimatedLottieView from "lottie-react-native";
 import { useEffect, useRef, useState } from "react";
 import { ScrollView, StyleSheet, TextInput, View } from "react-native";
 import nfcManager, { NfcEvents } from "react-native-nfc-manager";
+import ToastManager, { Toast } from "toastify-react-native";
 import { useInfoContext } from "../AppContext";
 import AndroidPrompt from "../components/AndroidPrompt";
 import ListItem from "../components/ListItem";
@@ -10,20 +11,16 @@ import { getDataFromApi, scanTag } from "../functions";
 const Activate = ({ navigation }) => {
   const [data, setData] = useState([]);
   const [inputVal, setInputVal] = useState("");
-  const [shownData, setShownData] = useState(data);
+  const [item, setItem] = useState({});
   const [loading, setLoading] = useState(false);
   const [flag, setFlag] = useState(false);
 
   const { info, setInfo } = useInfoContext();
-
   const handleSearch = () => {
-    if (inputVal === "") {
-      return;
-    }
-    const filtered = data.filter((x) =>
-      Object.values(x)?.toString()?.toLowerCase()?.includes(inputVal)
-    );
-    setShownData(filtered);
+    setLoading(true);
+    getDataFromApi(inputVal) //TODO: set info.zähler as parameter
+      .then((res) => setData(res))
+      .then(() => setLoading(false));
   };
 
   const promptRef = useRef();
@@ -36,7 +33,7 @@ const Activate = ({ navigation }) => {
       console.log("TAG", tag);
       promptRef.current.setVisible(false);
       setInfo({ ...info, tag: tag.id });
-      navigation.navigate("Confirm");
+      navigation.navigate("Confirm", { item });
     });
     scanTag();
     return () => {
@@ -44,25 +41,17 @@ const Activate = ({ navigation }) => {
     };
   }, [flag]);
 
-  useEffect(() => {
-    setLoading(true);
-    getDataFromApi() //TODO: set info.zähler as parameter
-      .then((res) => setData(res))
-      .then(() => setLoading(false));
-  }, []);
-
-  useEffect(() => {
-    setShownData(data);
-  }, [data]);
   const handleClick = (item) => {
-    setInfo({ ...info, itemID: item.id });
+    setInfo({ ...info, itemID: item.ItemNumber });
     setFlag(true);
+    setItem(item);
     promptRef.current?.setVisible(true);
-    // navigation.navigate("Confirm");
   };
+  // console.log(item);
   return (
     <View>
       <AndroidPrompt navigation={navigation} ref={promptRef} />
+      <ToastManager width={350} height={100} />
       <TextInput
         value={inputVal}
         onChangeText={(text) => setInputVal(text)}
@@ -86,16 +75,18 @@ const Activate = ({ navigation }) => {
 
       {!loading && (
         <ScrollView style={styles.scrollView}>
-          {shownData.map((item, i) => (
+          {data?.map((item, i) => (
             <ListItem
               key={i}
               navigation={navigation}
               i={i}
+              setItem={setItem}
               item={item}
               promptRef={promptRef}
               handleClick={handleClick}
             />
           ))}
+          <View style={styles.bottom}></View>
         </ScrollView>
       )}
     </View>
@@ -111,14 +102,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingLeft: 15,
   },
-  loading: {
-    width: 200,
-    height: 200,
-    fontSize: 30,
-    textAlignVertical: "center",
-    textAlign: "center",
-    backgroundColor: "#e10000",
-    borderRadius: 100,
+  bottom: {
+    height: 60,
   },
   loadingWrap: {
     justifyContent: "center",

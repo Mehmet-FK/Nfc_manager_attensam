@@ -11,24 +11,49 @@ export const extractNdef = (tag) => {
   return { msg, tagType, id };
 };
 
-export const getDataFromApi = async () => {
-  let url = "https://pbsolutions.dev/atina/AtinaUsers";
+export const getDataFromApi = async (filter) => {
+  if (filter === "") {
+    Toast.warn("Bitte Suchbegriff eingeben");
+    return [];
+  }
+
+  let url = `https://pbsolutions.dev/atina/api/AtinaItems/search?filter=${filter?.toLowerCase()}`;
   let data = null;
   try {
     data = await axios(url);
-  } catch (error) {
-    console.warn("axiosERROR", error);
+  } catch (e) {
+    Toast.error(e.message);
   }
-  return data.data;
+  if (data) {
+    return data.data;
+  }
+  return [];
 };
 
 export const postDataToApi = async (data) => {
-  let url = "https://pbsolutions.dev/atina/AtinaUsers";
+  let url = "https://pbsolutions.dev/atina/api/AtinaItems";
+  // console.log(data);
+  /* const data2 = {
+    itemType: "mehmet",
+    itemNumber: "mehmet",
+    street: "mehmet",
+    streetNumber: "mehmet",
+    zip: "mehmet",
+    city: "mehmet",
+    country: "mehmet",
+    createdBy: "mehmet",
+  };
+  console.log(data2); */
+
   try {
-    await axios.post(url, data);
+    console.log(2);
+    await axios.post(url, data2);
+    console.log(3);
     Toast.success("Erfolgreich aktiviert...");
   } catch (error) {
+    console.warn(error.message);
     Toast.error("Etwas schiefgelaufen");
+    Toast.error(error.message);
   }
 };
 

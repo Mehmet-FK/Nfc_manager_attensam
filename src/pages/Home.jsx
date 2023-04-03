@@ -56,6 +56,14 @@ const Home = ({ navigation }) => {
               <Text style={styles.text}>INFO</Text>
             </View>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.list}
+            onPress={() => navigation.navigate("AddNdefRecord")}
+          >
+            <View style={styles.list}>
+              <Text style={styles.text}>INFO</Text>
+            </View>
+          </TouchableOpacity>
         </View>
       )}
     </View>

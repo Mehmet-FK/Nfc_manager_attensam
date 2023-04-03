@@ -1,10 +1,17 @@
 import { useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import {
+  NativeModules,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 import nfcManager, { Ndef, NfcEvents, NfcTech } from "react-native-nfc-manager";
 import AndroidPrompt from "../components/AndroidPrompt";
 
 import { addNdefRecord, RTD_MAP, writeMessage } from "../functions";
+const { MyModule } = NativeModules;
 
 const AddNdefRecord = ({ navigation }) => {
   const [tagInfo, setTagInfo] = useState([]);
@@ -33,21 +40,19 @@ const AddNdefRecord = ({ navigation }) => {
       console.warn("ERROR ANR: 23-28", error);
     }
   }
-
-  useEffect(() => {
-    scanTag();
-    registerTag();
-    promptRef.current.setVisible(true);
-    return () => {
-      nfcManager.setEventListener(NfcEvents.DiscoverTag, null);
-    };
-  }, []);
+  const handleOnPress = () => {
+    MyModule.createString("0434BC22645081", (pass) => console.log(pass));
+  };
 
   return (
     <View
       style={{ height: "100%", alignItems: "center", justifyContent: "center" }}
     >
       <AndroidPrompt ref={promptRef} navigation={navigation} />
+
+      <TouchableOpacity onPress={handleOnPress}>
+        <Text>Click on Me</Text>
+      </TouchableOpacity>
     </View>
   );
 };
